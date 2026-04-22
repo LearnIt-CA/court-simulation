@@ -47,6 +47,24 @@ export default function Timer({ minutes, label }) {
     reset();
   }, [minutes]);
 
+  // Play time's up sound
+  useEffect(() => {
+    if (!done) return;
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [[440, 0, 0.2], [440, 0.25, 0.2], [330, 0.5, 0.4]].forEach(([freq, when, dur]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = "sine";
+      gain.gain.setValueAtTime(0.4, ctx.currentTime + when);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + when + dur);
+      osc.start(ctx.currentTime + when);
+      osc.stop(ctx.currentTime + when + dur);
+    });
+  }, [done]);
+
   const progress = secondsLeft / totalSeconds;
   const dashOffset = CIRCUMFERENCE * (1 - progress);
 

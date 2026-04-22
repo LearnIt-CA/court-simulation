@@ -54,29 +54,15 @@ export default function DonutChart({ side1Count, side2Count, side1Name, side2Nam
         {/* Center text */}
         <text
           x={cx}
-          y={cy - 8}
+          y={cy}
           textAnchor="middle"
           dominantBaseline="middle"
-          fill="white"
-          fontSize={total === 0 ? "13" : "22"}
-          fontWeight="bold"
-          fontFamily="Georgia, serif"
+          fill={total === 0 ? "white" : "#94a3b8"}
+          fontSize={total === 0 ? "13" : "12"}
+          fontFamily={total === 0 ? "Georgia, serif" : "sans-serif"}
         >
-          {total === 0 ? "No votes yet" : `${side1Pct}%`}
+          {total === 0 ? "No votes yet" : `${side1Pct}% · ${side2Pct}%`}
         </text>
-        {total > 0 && (
-          <text
-            x={cx}
-            y={cy + 16}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="#94a3b8"
-            fontSize="12"
-            fontFamily="sans-serif"
-          >
-            {side1Pct}% · {side2Pct}%
-          </text>
-        )}
       </svg>
 
       {/* Legend */}

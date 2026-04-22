@@ -9,7 +9,7 @@ const CASES = [
   },
   {
     title: "Case 2: Sovereignty Clash",
-    side1: { name: "Team Defender", short: "Defender" },
+    side1: { name: "Team Defenders", short: "Defenders" },
     side2: { name: "Team Company", short: "Company" },
   },
   {

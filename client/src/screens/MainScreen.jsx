@@ -8,21 +8,21 @@ const CASES = [
   {
     title: "Case 1: Climate Justice",
     intro:
-      "A coastal Indigenous community seeks a court order compelling the Province to enforce its own climate commitments. Rising sea levels and record flooding have destroyed homes and sacred lands. The Claimants argue the Province's inaction violates constitutional rights to life and security. The Province contends climate policy is a legislative, not judicial, matter.",
+      "Seven young Ontarians, some as young as 12 when they filed the case, are suing the provincial government for rolling back its climate targets. They argue that the weaker targets violate their constitutional rights to life, liberty, and security under the Canadian Charter. Just days before a scheduled hearing in December 2025, Ontario repealed its climate legislation entirely.",
     side1: { name: "Team Claimants", short: "Claimants" },
     side2: { name: "Team Province", short: "Province" },
   },
   {
     title: "Case 2: Sovereignty Clash",
     intro:
-      "A resource extraction company holds a government-issued permit to mine on land the Defender's nation has occupied for millennia. The Defender argues the permit was issued without free, prior, and informed consent — a violation of Indigenous sovereignty and international law. The Company insists it followed all regulatory requirements and the permit is lawful.",
-    side1: { name: "Team Defender", short: "Defender" },
+      "Indigenous land defenders were arrested and found guilty of criminal contempt for blocking a natural gas pipeline through their unceded territory, land the Supreme Court of Canada confirmed was never surrendered by treaty. The hereditary chiefs who govern the land never gave consent, while elected band councils did. Two legitimate legal systems, court injunctions and Indigenous sovereignty, collide head-on.",
+    side1: { name: "Team Defenders", short: "Defenders" },
     side2: { name: "Team Company", short: "Company" },
   },
   {
     title: "Case 3: AI & Arrest",
     intro:
-      "The Plaintiff was wrongfully arrested after the City's AI-powered facial recognition system misidentified them as a suspect. They spent 48 hours in detention and lost their job. The Plaintiff argues the City is liable for deploying an unproven, biased technology without adequate safeguards. The City claims it acted in good faith on the best available tools.",
+      "Robert Williams, a Black man, was arrested at his home in front of his family after a facial recognition system identified him as a match to a suspect, in what became the first widely reported AI-assisted arrest of its kind in the U.S., sparking debate over the use of emerging technology in policing.",
     side1: { name: "Team Plaintiff", short: "Plaintiff" },
     side2: { name: "Team City", short: "City" },
   },
@@ -348,11 +348,11 @@ export default function MainScreen() {
       case "pre-results":
         return <ResultsSlide caseData={caseData} votes={votes} caseIdx={currentCase} type="pre" />;
       case "side1":
-        return <PresentationSlide caseData={caseData} side="side1" minutes={2} />;
+        return <PresentationSlide key={`${currentCase}-side1`} caseData={caseData} side="side1" minutes={2} />;
       case "side2":
-        return <PresentationSlide caseData={caseData} side="side2" minutes={2} />;
+        return <PresentationSlide key={`${currentCase}-side2`} caseData={caseData} side="side2" minutes={2} />;
       case "debate":
-        return <DebateSlide />;
+        return <DebateSlide key={`${currentCase}-debate`} />;
       case "post-vote":
         return <PostVoteSlide caseData={caseData} votes={votes} caseIdx={currentCase} />;
       case "post-results":
