@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-white;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .timer-ring {
+    transition: stroke-dashoffset 1s linear;
+  }
+}
