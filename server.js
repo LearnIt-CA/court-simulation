@@ -85,6 +85,22 @@ function getStudentVotes(studentId) {
   return result;
 }
 
+function rewindStage() {
+  if (state.finished) {
+    state.finished = false;
+    saveState();
+    return;
+  }
+  const stageIdx = STAGES.indexOf(state.currentStage);
+  if (stageIdx > 0) {
+    state.currentStage = STAGES[stageIdx - 1];
+  } else if (state.currentCase > 0) {
+    state.currentCase -= 1;
+    state.currentStage = STAGES[STAGES.length - 1];
+  }
+  saveState();
+}
+
 function advanceStage() {
   const stageIdx = STAGES.indexOf(state.currentStage);
   if (stageIdx < STAGES.length - 1) {
@@ -143,6 +159,22 @@ io.on("connection", (socket) => {
     io.emit("state", getPublicState());
     // Send personal vote record back to voter
     socket.emit("my_votes", getStudentVotes(studentId));
+  });
+
+  // Main screen: go back one stage
+  socket.on("prev", () => {
+    rewindStage();
+    io.emit("state", getPublicState());
+  });
+
+  // Main screen: jump directly to a case
+  socket.on("jumpToCase", ({ caseIdx }) => {
+    if (caseIdx < 0 || caseIdx >= cases.length) return;
+    state.currentCase = caseIdx;
+    state.currentStage = "intro";
+    state.finished = false;
+    saveState();
+    io.emit("state", getPublicState());
   });
 
   // Main screen: advance stage

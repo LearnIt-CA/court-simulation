@@ -62,11 +62,21 @@ function StagePill({ label, active }) {
   );
 }
 
-function CaseNav({ currentCase }) {
+function CaseNav({ currentCase, onJumpToCase }) {
   return (
     <div className="flex items-center gap-2">
       {CASES.map((c, i) => (
-        <StagePill key={i} label={`Case ${i + 1}`} active={i === currentCase} />
+        <button
+          key={i}
+          onClick={() => i !== currentCase && onJumpToCase(i)}
+          className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider border transition-colors ${
+            i === currentCase
+              ? "bg-amber-500/20 border-amber-500 text-amber-400 cursor-default"
+              : "bg-slate-800 border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300 cursor-pointer"
+          }`}
+        >
+          Case {i + 1}
+        </button>
       ))}
     </div>
   );
@@ -311,6 +321,14 @@ export default function MainScreen() {
     socket.emit("advance");
   }
 
+  function handlePrev() {
+    socket.emit("prev");
+  }
+
+  function handleJumpToCase(caseIdx) {
+    socket.emit("jumpToCase", { caseIdx });
+  }
+
   function handleReset() {
     if (confirmReset) {
       socket.emit("reset");
@@ -368,7 +386,7 @@ export default function MainScreen() {
           </div>
         </div>
 
-        {!finished && <CaseNav currentCase={currentCase} />}
+        {!finished && <CaseNav currentCase={currentCase} onJumpToCase={handleJumpToCase} />}
 
         <button
           onClick={handleReset}
@@ -384,17 +402,26 @@ export default function MainScreen() {
       {/* Slide content */}
       <div className="flex-1 flex flex-col">{renderSlide()}</div>
 
-      {/* Footer / advance button */}
-      {!finished && (
-        <div className="flex justify-end pt-4 border-t border-slate-800">
+      {/* Footer / navigation buttons */}
+      <div className="flex justify-between items-center pt-4 border-t border-slate-800">
+        <button
+          onClick={handlePrev}
+          disabled={!finished && currentCase === 0 && currentStage === "intro"}
+          className="bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed text-slate-300 font-bold px-6 py-3 rounded-xl text-sm uppercase tracking-wider transition-all active:scale-95"
+        >
+          ← Back
+        </button>
+        {!finished ? (
           <button
             onClick={handleAdvance}
             className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-8 py-3 rounded-xl text-sm uppercase tracking-wider transition-all active:scale-95"
           >
             {nextLabel}
           </button>
-        </div>
-      )}
+        ) : (
+          <div />
+        )}
+      </div>
     </div>
   );
 }
